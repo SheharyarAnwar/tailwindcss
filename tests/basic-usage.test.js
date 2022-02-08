@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { html, run, css } from './util/run'
+import { html, run, css, defaults } from './util/run'
 
 test('basic usage', () => {
   let config = {
@@ -186,5 +186,27 @@ it('can scan extremely long classes without crashing', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css``)
+  })
+})
+
+it('variant star duplicate issue', () => {
+  let config = {
+    content: [{ raw: html`underline focus:*` }],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+      .underline {
+        text-decoration-line: underline;
+      }
+    `)
   })
 })
