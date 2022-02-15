@@ -189,7 +189,7 @@ it('can scan extremely long classes without crashing', () => {
   })
 })
 
-it('variant star duplicate issue', () => {
+it('does not produce duplicate output when seeing variants preceding a wildcard (*)', () => {
   let config = {
     content: [{ raw: html`underline focus:*` }],
     corePlugins: { preflight: false },
